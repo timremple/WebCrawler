@@ -55,7 +55,7 @@ Then to test command line error processing:
 
 `./test_main.sh`
 
-Tests were sufficient to cover 100% of lines in `CrawlChildPages` and `DisplayResults` classes.
+Tests are sufficient to cover 95% of lines in `CrawlChildPages` and 100% in `DisplayResults` classes.
 91% of lines in `ProcessPage` class were covered; only lines 69 and 78 not covered.
 
 #####Operation

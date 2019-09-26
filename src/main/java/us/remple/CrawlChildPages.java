@@ -47,7 +47,7 @@ class CrawlChildPages {
                 Set<String> allPageLinks = processPage.getPageLinks();
                 for (String link : allPageLinks) {
                     // Again, treat domain portion of URL as case insensitive.
-                    if (!link.toLowerCase().startsWith(domain)) {
+                    if (!linkIsInDomain(link, domain)) {
                         externalPageLinks.add(link);
                     }
                 }
@@ -61,7 +61,7 @@ class CrawlChildPages {
                 }
 
                 for (String link : allPageLinks) {
-                    if (link.toLowerCase().startsWith(domain)) {
+                    if (linkIsInDomain(link, domain)) {
                         crawl(Utils.normalizeUrl(Utils.removeUrlRef(link)), depth + 1);
                     }
                 }
@@ -69,6 +69,30 @@ class CrawlChildPages {
                 return true;
             } else return false;
         } else return true;
+    }
+
+    private final String WWW = "www.";
+    private final String HTTP = "http:";
+    private final String HTTPS = "https:";
+
+    private boolean linkIsInDomain(String link, String domain) {
+        String lcLink = link.toLowerCase();
+        // domain is assumed to be all lower case
+        if (domain.contains(WWW) && !lcLink.contains(WWW)) {
+            domain = domain.replace(WWW, "");
+        }
+        else if (!domain.contains(WWW) && lcLink.contains(WWW)) {
+            lcLink = lcLink.replace(WWW, "");
+        }
+
+        if (domain.contains(HTTP) && lcLink.contains(HTTPS)) {
+            domain = domain.replace(HTTP, HTTPS);
+        }
+        else if (domain.contains(HTTPS) && lcLink.contains(HTTP)) {
+            domain = domain.replace(HTTPS, HTTP);
+        }
+
+        return lcLink.startsWith(domain);
     }
 
 }

@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TestSet {
 
@@ -101,13 +101,13 @@ public class TestSet {
         String exampleUrl3 = exampleUrl + "/example2";
 
         String html = "<html><head></head><body>" +
-            "<a href=\"" + exampleUrl2 + "#ref2 \">junk</a>" +
-            "<a href=\"" + exampleUrl3 + "/ \">junk2</a>" +
+            "<a href=\"" + exampleUrl2.replace("remple3", "www.remple3") + "#ref2 \">junk</a>" +
+            "<a href=\"" + exampleUrl3.replace("http", "https") + "/ \">junk2</a>" +
             "</body></html>";
         Document document = Jsoup.parse(html);
 
         documents.put(exampleUrl, document);
-        documents.put(exampleUrl2, new Document(exampleUrl2));
+        documents.put(exampleUrl2.replace("remple3", "www.remple3"), new Document(exampleUrl2));
 
         String exampleUrl4 = exampleUrl3 + "/example3";
         String exampleUrl5 = exampleUrl3 + "/example4";
@@ -118,7 +118,7 @@ public class TestSet {
             "</body></html>";
         document = Jsoup.parse(html);
 
-        documents.put(exampleUrl3, document);
+        documents.put(exampleUrl3.replace("http", "https"), document);
         documents.put(exampleUrl4, new Document(exampleUrl4));
         documents.put(exampleUrl5, new Document(exampleUrl5));
 
@@ -128,8 +128,8 @@ public class TestSet {
         Crawler.doCrawl(exampleUrl);
 
         assertEquals("0  " + exampleUrl + "\n" +
-            "1  .  " + exampleUrl2 + "\n" +
-            "1  .  " + exampleUrl3 + "\n" +
+            "1  .  " + exampleUrl2.replace("remple3", "www.remple3") + "\n" +
+            "1  .  " + exampleUrl3.replace("http", "https") + "\n" +
             "2  .  .  " + exampleUrl4 + "\n" +
             "2  .  .  " + exampleUrl5 + "\n",
             testResultWriter.retrieve());
